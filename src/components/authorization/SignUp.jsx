@@ -1,14 +1,36 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 import { app } from "../../firebaseConfig"
 import { writeUserData } from "../../utils/database"
+
+const PasswordRequirements = ({ show }) => {
+  if (!show) return null
+
+  return (
+    <div className="absolute z-10 mt-2 p-4 bg-white border border-gray-300 rounded-md shadow-lg">
+      <ul className="text-sm text-gray-600">Password must be:
+        <li>1. At least 6 characters long</li>
+        <li>2. Contain at least one uppercase letter</li>
+        <li>3. Contain at least one numerical character</li>
+        </ul>
+    </div>
+  )
+}
+
+{/* 
+  ADD IN PASSWORD STRENGTH CHECKER
+  ADD IN PASSWORD MATCH CHECKER 
+*/}
 
 export default function SignUp() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const navigate = useNavigate()
+  const [showPasswordRequirements, setShowPasswordRequirements] = useState(false)
+
+
 
   const handleSignUp = async (e) => {
     e.preventDefault()
@@ -65,19 +87,23 @@ export default function SignUp() {
                 Password
               </label>
               <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  autoComplete="new-password"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className="relative">
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    autoComplete="new-password"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onFocus={() => setShowPasswordRequirements(true)}
+                    onBlur={() => setShowPasswordRequirements(false)}
+                  />
+                  <PasswordRequirements show={showPasswordRequirements} />
+                </div>
               </div>
             </div>
-
             <div>
               <label htmlFor="confirm-password" className="block text-sm font-medium leading-6 text-gray-900">
                 Confirm Password
@@ -116,7 +142,7 @@ export default function SignUp() {
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
             What you're signing up for:
           </h3>
-          <div className="inline-block text-left bg-gray-50 rounded-lg p-6 shadow-sm">
+          <div className="inline-block text-left rounded-lg p-6 shadow-sm">
             <div className="flex justify-center">
               <ul className="mr-8">
                 {[
