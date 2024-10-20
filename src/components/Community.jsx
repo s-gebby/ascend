@@ -4,8 +4,10 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { readPosts, createPost, encouragePost, readUserData, deletePost, addComment, getComments, deleteComment, getNewestMembers } from '../utils/database.js'
 import { Avatar, TextInput, Button, Paper, Text, Menu } from '@mantine/core'
 import { motion } from 'framer-motion'
-import { HeartIcon, TrashIcon, EllipsisVerticalIcon, BellIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, EllipsisVerticalIcon, BellIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
+import { HeartIcon as HeartIconOutline } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 
 
 
@@ -253,15 +255,23 @@ export default function Community() {
                     >
                       {/* Encourage button */}
                       <div className="flex-shrink-0 mr-4">
+                      <div className="flex-shrink-0 mr-4 flex flex-col items-center">
                         <Button 
-                          variant="light" 
-                          color="ascend-green" 
+                          variant="transparent" 
                           onClick={() => handleEncourage(post.id)}
+                          color='ascend-green'
                           className="p-1"
                         >
-                          <HeartIcon className="h-5 w-5" />
+                          {post.encouragements && post.encouragements[user.uid] ? (
+                            <HeartIconSolid className="h-6 w-6 text-ascend-green" />
+                          ) : (
+                            <HeartIconOutline className="h-6 w-6" />
+                          )}
                         </Button>
-                        <span className="text-sm">{post.encouragements ? Object.keys(post.encouragements).length : 0}</span>
+                        <span className="text-xs font-bold mb-1">
+                          {post.encouragements ? Object.keys(post.encouragements).length : 0}
+                        </span>
+                      </div>
                       </div>
     
                       {/* Post content */}
@@ -293,6 +303,7 @@ export default function Community() {
                         )}
                         <p className="text-gray-700 whitespace-pre-wrap break-words">{post.content}</p>
                       </div>
+                      
                     </motion.div>
                     
                     {/* Comments section */}

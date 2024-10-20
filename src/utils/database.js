@@ -96,8 +96,16 @@ export const readPosts = async () => {
 
 export const encouragePost = async (postId, userId) => {
   const db = getDatabase();
-  const encouragementRef = ref(db, `posts/${postId}/encouragements/${userId}`);
-  await set(encouragementRef, true);
+  const postRef = ref(db, `posts/${postId}/encouragements/${userId}`);
+  const snapshot = await get(postRef);
+
+  if (snapshot.exists()) {
+    // If user has already encouraged, remove the encouragement
+    await set(postRef, null);
+  } else {
+    // If user hasn't encouraged, add the encouragement
+    await set(postRef, true);
+  }
 };
 
 export const deletePost = (postId) => {
