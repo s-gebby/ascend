@@ -154,16 +154,36 @@ const moveTaskToActive = (taskId) => {
     const now = new Date();
     const due = new Date(dueDate);
     const difference = due - now;
+  
     const days = Math.floor(difference / (1000 * 60 * 60 * 24));
     const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    {/* ADD IN A NOTIFICATION FOR THIS!!! */ }
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
     const isLessThan3Days = days < 3;
+  
     return {
-      text: `${days}d ${hours}h`,
+      text: `${days}d ${hours}h ${minutes}m ${seconds}s`,
       isUrgent: isLessThan3Days
     };
   };
 
+  const [countdown, setCountdown] = useState({});
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCountdown(calculateCountdown(tasks.dueDate));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  <Badge 
+    leftSection={<CalendarIcon className="h-3 w-3" />} 
+    color={countdown.isUrgent ? "red" : "ascend-green"} 
+    size="sm"
+  >
+    Due in {countdown.text}
+  </Badge>
   const getUpcomingDeadlines = (tasks) => {
     const now = new Date();
     const in24Hours = new Date(now.getTime() + 24 * 60 * 60 * 1000);

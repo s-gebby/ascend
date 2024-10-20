@@ -259,11 +259,11 @@ export default function Community() {
                         <Button 
                           variant="transparent" 
                           onClick={() => handleEncourage(post.id)}
-                          color='ascend-green'
+                          color='ascend-pink'
                           className="p-1"
                         >
                           {post.encouragements && post.encouragements[user.uid] ? (
-                            <HeartIconSolid className="h-6 w-6 text-ascend-green" />
+                            <HeartIconSolid className="h-6 w-6 text-ascend-pink" />
                           ) : (
                             <HeartIconOutline className="h-6 w-6" />
                           )}

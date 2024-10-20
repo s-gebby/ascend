@@ -19,7 +19,6 @@ export default function Dashboard() {
   const handleJournalPromptClick = () => {
     navigate('/journal');
   };
-  const [setTasks] = useState([]);
   const [randomPrompt, setRandomPrompt] = useState('');
   const [recentTasks, setRecentTasks] = useState([]);
 
@@ -52,7 +51,8 @@ export default function Dashboard() {
     const fetchRecentTasks = async () => {
       if (auth.currentUser) {
         const fetchedTasks = await readTasks(auth.currentUser.uid);
-        setRecentTasks(fetchedTasks.slice(0, 5)); // Get the 5 most recent tasks
+        const activeTasks = fetchedTasks.filter(task => !task.completed);
+        setRecentTasks(activeTasks.slice(0, 5)); // Get the 5 most recent active tasks
       }
     };
   
@@ -269,7 +269,7 @@ export default function Dashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="lg:col-span-2 md:col-span-1 bg-white rounded-sm border border-gray-300"
+              className="lg:col-span-2 md:col-span-1 bg-white rounded-sm border border-gray-300 p-4"
             >
               <h4 className="text-lg text-ascend-black mb-4 flex items-center">
                 <ClipboardDocumentListIcon className="w-6 h-6 mr-2 text-ascend-black" />
@@ -363,32 +363,25 @@ export default function Dashboard() {
               </button>
             </motion.div>
             
-            {/* Recent Tasks */}
+            {/* Active Tasks */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="lg:col-span-1 md:col-span-1 bg-white rounded-xs p-6 border border-gray-300"
+              className="lg:col-span-1 md:col-span-1 bg-white rounded-xs p-4 border border-gray-300"
             >
               <h4 className="text-xl text-ascend-black mb-4 flex items-center">
                 <ClipboardIcon className="w-6 h-6 mr-2 text-ascend-black" />
-                Recent Tasks
+                Active Tasks
               </h4>
               <div className="overflow-y-auto max-h-64 text-xs space-y-3">
                 {recentTasks.map((task) => (
                   <div key={task.id} className="flex items-center justify-between py-3 px-4 border-t rounded-sm transition-colors">
                     <div className="flex flex-row items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        checked={task.completed}
-                        readOnly
-                        className="form-checkbox h-4 w-4 text-ascend-green rounded focus:ring-ascend-green"
-                      />
-                      <span className={`font-medium ${task.completed ? 'line-through text-gray-400' : 'text-ascend-black'}`}>
+                      <span className="font-medium text-ascend-black">
                         {task.title}
                       </span>
                     </div>
-                    {/* look into adding bg to the due date */}
                     <span className="text-xs text-ascend-blue font-semibold py-1 px-2 rounded-full">
                       {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'No due date'}
                     </span>

@@ -96,7 +96,7 @@ export default function Account() {
       >
         <header className="bg-white z-10 p-4 shadow-md">
           <div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-center">
-            <h2 className="text-2xl font-semibold text-ascend-black">Journal</h2>
+            <h2 className="text-2xl font-semibold text-ascend-black">Account</h2>
             <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4 items-center">
               <div className="w-full sm:w-auto">
                 <input
