@@ -65,7 +65,7 @@ function AIBuddy() {
     >
       <h4 className="text-xl text-ascend-black mb-4 flex items-center">
         <SparklesIcon className="w-6 h-6 mr-2 text-ascend-black" />
-        AI Accountability Buddy
+        Cindy the AI Buddy
       </h4>
       <div className="overflow-y-auto max-h-64 text-xs space-y-3">
         {chatMessages.map((message, index) => (
