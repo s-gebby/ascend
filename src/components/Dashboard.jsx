@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import { getAuth } from 'firebase/auth';
 import { readGoals, getRecentPosts } from '../utils/database';
-import { BellIcon, UserCircleIcon, BookOpenIcon, PencilSquareIcon, ClipboardDocumentListIcon, UserGroupIcon, VideoCameraIcon, SparklesIcon, ClipboardIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
+import { BellIcon, UserCircleIcon, BookOpenIcon, PencilSquareIcon, ClipboardDocumentListIcon, UserGroupIcon, VideoCameraIcon, ClipboardIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import MotivationalVideo from './MotivationalVideo';
 import { readTasks, updateTask } from '../utils/database';
 import { motion } from 'framer-motion';
+import AIBuddy from './AIBuddy';
+
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
@@ -21,7 +23,6 @@ export default function Dashboard() {
   };
   const [randomPrompt, setRandomPrompt] = useState('');
   const [recentTasks, setRecentTasks] = useState([]);
-
 
   useEffect(() => {
     setRandomPrompt(journalPrompts[Math.floor(Math.random() * journalPrompts.length)]);
@@ -398,28 +399,15 @@ export default function Dashboard() {
                 <ArrowRightIcon className="w-4 h-4 ml-2" />
               </button>
             </motion.div>
-            
-            {/* Spotlight Member */}
+            {/* AI Buddy Section */}
             <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="lg:col-span-1 md:col-span-1 bg-white rounded-sm p-4 border border-gray-300"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="lg:col-span-1 md:col-span-1"
             >
-              <h4 className="text-lg text-ascend-black mb-4 flex items-center">
-                <SparklesIcon className="w-6 h-6 mr-2 text-ascend-black" />
-                Monthly Spotlight
-              </h4>
-              <div className='flex flex-col items-center'>
-                {/* Replace with actual spotlight member data */}
-                <span className="text-lg font-semibold text-center mt-4 uppercase">Coming Soon!</span>
-                <br></br>
-                <p className="text-sm text-ascend-black text-center leading-relaxed ">
-                We are excited to almost introduce a new feature that celebrates our members dedication and perseverance in achieving their goals. As part of this initiative, members will have the opportunity to share their personal stories detailing their journey to success. Be on the look out for more information!
-                </p>  
-              </div>
+              <AIBuddy />
             </motion.div>
-      
             {/* Motivational Video */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
