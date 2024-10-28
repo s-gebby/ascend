@@ -60,7 +60,7 @@ const handleSignIn = async (e) => {
                   Password
                 </label>
                 <div className="text-sm">
-                  <a href="#" className="font-semibold text-gray-400 hover:text-black">
+                  <a href="#" className="font-semibold text-green-600 hover:text-ascend-green">
                     Forgot password?
                   </a>
                 </div>

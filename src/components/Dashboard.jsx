@@ -234,11 +234,13 @@ export default function Dashboard() {
           </div>
           <p className="text-xs italic text-gray-600 mt-2 text-center sm:text-left">"{dailyQuote}"</p>
         </header>
+
+        {/* Main Dashboard Content */}
         <motion.main
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="flex-1 overflow-x-hidden overflow-y-auto bg-ascend-white p-4"
+          className="flex-1 overflow-x-hidden overflow-y-auto bg-ascend-white p-2 sm:p-4"
         >
         
               {/* Under Construction Modal */}
@@ -313,7 +315,7 @@ export default function Dashboard() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="lg:col-span-1 md:col-span-1 bg-white rounded-sm p-4 border border-gray-300"
             >
-              <h4 className="text-lg text-ascend-black mb-4 flex items-center">
+              <h4 className="text-lg text-ascend-black mb-10 flex items-center">
                 <UserGroupIcon className="w-6 h-6 mr-2 text-ascend-black" />
                 Recent Posts
               </h4>
@@ -412,8 +414,8 @@ export default function Dashboard() {
                 {/* Replace with actual spotlight member data */}
                 <span className="text-lg font-semibold text-center mt-4 uppercase">Coming Soon!</span>
                 <br></br>
-                <p className="text-sm text-ascend-black text-center leading-relaxed">
-                We are excited to introduce a new feature that celebrates our members' dedication and perseverance in achieving their goals. As part of this initiative, members will have the opportunity to share their personal stories detailing their journey to success.<br></br><br></br> Our team will anonymously review and select one member to be featured as the spotlight of the month. This initiative is designed to inspire and motivate others to continue striving toward their aspirations.
+                <p className="text-sm text-ascend-black text-center leading-relaxed ">
+                We are excited to almost introduce a new feature that celebrates our members dedication and perseverance in achieving their goals. As part of this initiative, members will have the opportunity to share their personal stories detailing their journey to success. Be on the look out for more information!
                 </p>  
               </div>
             </motion.div>
@@ -441,7 +443,7 @@ export default function Dashboard() {
                   </div>
                   <div className="w-full md:w-1/3">
                     <p className="text-sm text-ascend-black leading-relaxed text-justify mt-4">
-                      This powerful tool for personal growth offers inspiration, fresh perspectives, and emotional boosts. These videos reinforce goals, provide valuable insights, and cultivate a positive mindset. By triggering immediate action and fostering a sense of community, they significantly enhance your journey towards achieving your aspirations. Watch this week's video to ignite your motivation and stay focused on your path to success!
+                      This powerful tool for personal growth offers inspiration. These videos reinforce goals and cultivate a positive mindset. By triggering immediate action and fostering a sense of community, they significantly enhance your journey towards achieving your aspirations. Watch this week's video to ignite your motivation and stay focused on your path to success!
                     </p>
                   </div>
                 </div>
