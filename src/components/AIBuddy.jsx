@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { readGoals } from '../utils/database';
+import { readGoals, readTasks, getJournalEntries, readUserData } from '../utils/database';
 import openai from '../services/openai';
 import { SparklesIcon } from '@heroicons/react/24/outline';
 import  { motion } from 'framer-motion';
@@ -10,6 +10,21 @@ function AIBuddy() {
   const [chatMessages, setChatMessages] = useState([]);
   const [userInput, setUserInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  
+  const aggregateUserContext = async (userId) => {
+    const goals = await readGoals(userId);
+    const tasks = await readTasks(userId);
+    const journalEntries = await getJournalEntries(userId);
+    const stats = await readUserData(userId);
+    
+    return {
+      goals,
+      tasks,
+      journalEntries,
+      stats,
+      lastActivity: new Date().toISOString()
+    };
+  };
 
   useEffect(() => {
     const loadGoals = async () => {
@@ -18,20 +33,42 @@ function AIBuddy() {
     };
     loadGoals();
   }, [currentUser]);
-
   const sendMessageToAI = async (message) => {
     setIsLoading(true);
     try {
+      const systemMessage = {
+        role: "system",
+        content: `You are Cindy, an advanced AI accountability partner integrated throughout the Ascend platform. You have access to:
+          - Goals and progress tracking
+          - Journal entries and reflections
+          - Task management and completion status
+          - Community interactions and encouragement
+          - Statistical performance data
+          - Account information and preferences
+
+          Your capabilities include:
+          - Analyzing goal progress and providing actionable feedback
+          - Suggesting journal prompts based on user's goals
+          - Prioritizing tasks and recommending time management strategies
+          - Offering motivation based on community engagement
+          - Interpreting performance statistics to guide improvement
+          - Personalizing advice based on user preferences and history`
+      };
+
+      const userContext = await aggregateUserContext(currentUser.uid);
+  
       const completion = await openai.chat.completions.create({
         messages: [
-          { 
-            role: "system", 
-            content: "You are a motivational AI accountability partner. Your name is Cindy. You must introduce yourself as Cindy on the first message. Your role is to help users achieve their goals by providing encouragement, advice, and accountability. Keep responses concise and actionable."
+          systemMessage,
+          {
+            role: "system",
+            content: `Current user context: ${JSON.stringify(userContext)}`
           },
           { role: "user", content: message }
         ],
-        model: "gpt-4o-mini",  // This is the correct model identifier
-        max_tokens: 150  // Limit response length to reduce costs
+        model: "gpt-3.5-turbo-16k",
+        max_tokens: 500,
+        temperature: 0.7
       });
 
       return completion.choices[0].message.content;
