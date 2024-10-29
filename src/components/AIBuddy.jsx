@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { readGoals, readTasks, getJournalEntries, readUserData } from '../utils/database';
 import openai from '../services/openai';
@@ -46,7 +46,31 @@ function AIBuddy() {
           - Statistical performance data
           - Account information and preferences
 
+          In your responses, you should not:
+          Urge users to engage in unhealthy behaviors
+          Provide unsolicited advice on personal matters
+          Sound like a robot (be more human-like)          
+
+          I would like you to introduce yourself, only one time ever, to the user and provide a brief overview of your capabilities.
+          Please be concise and provide a clear introduction. 
           Your capabilities include:
+          - Introducing new users to the platform and guiding them through onboarding
+          - Listening to user's goals and aspirations
+          - Providing personalized feedback and encouragement
+          - Suggesting journal prompts based on user's goals
+          - Prioritizing tasks and recommending time management strategies
+          - Offering motivation based on community engagement
+          - Interpreting performance statistics to guide improvement
+          - Personalizing advice based on user preferences and history
+          - Providing insights into user's progress and areas for improvement
+          - Alerting user to important updates and changes
+          - Being a friendly and supportive companion
+          - Supporting user's mental health and well-being
+          - Providing educational resources and tips
+          - AA meetings and resources
+          - Addiction resources
+          - Providing resources for addiction recovery
+          - Providing a well made workout plan
           - Analyzing goal progress and providing actionable feedback
           - Suggesting journal prompts based on user's goals
           - Prioritizing tasks and recommending time management strategies
@@ -66,7 +90,7 @@ function AIBuddy() {
           },
           { role: "user", content: message }
         ],
-        model: "gpt-3.5-turbo-16k",
+        model: "gpt-4o",
         max_tokens: 500,
         temperature: 0.7
       });
@@ -83,7 +107,6 @@ function AIBuddy() {
     
     // Prevent rapid-fire requests
     if (isLoading) return;
-    
     const newUserMessage = { role: 'user', content: userInput };
     setChatMessages(prev => [...prev, newUserMessage]);
     setUserInput('');
@@ -93,25 +116,36 @@ function AIBuddy() {
     setChatMessages(prev => [...prev, newAiMessage]);
   };
 
+  const chatContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="lg:col-span-1 md:col-span-1 bg-white rounded-sm p-4 border border-gray-300"
+      className="lg:col-span-1 md:col-span-1 bg-white rounded-xs p-4 border border-gray-300 h-[365px] flex flex-col"
     >
       <h4 className="text-xl text-ascend-black mb-4 flex items-center">
         <SparklesIcon className="w-6 h-6 mr-2 text-ascend-black" />
         Cindy the AI Buddy
       </h4>
-      <div className="overflow-y-auto max-h-64 text-xs space-y-3">
+      <div 
+        ref={chatContainerRef}
+        className="flex-1 overflow-y-auto text-xs space-y-3"
+      >
         {chatMessages.map((message, index) => (
           <div
             key={index}
             className={`p-2 rounded-lg ${
               message.role === 'user'
                 ? 'bg-ascend-blue text-white ml-auto max-w-[80%]'
-                : 'bg-gray-100 text-ascend-black mr-auto max-w-[80%]'
+                : 'bg-gray-200 text-ascend-black mr-auto max-w-[80%]'
             }`}
           >
             {message.content}
@@ -143,5 +177,4 @@ function AIBuddy() {
     </motion.div>
   );
 }
-
 export default AIBuddy;
