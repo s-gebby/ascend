@@ -26,7 +26,7 @@ function AIBuddy() {
         messages: [
           { 
             role: "system", 
-            content: "You are a motivational AI accountability partner. Your name is Cindy. Your role is to help users achieve their goals by providing encouragement, advice, and accountability. Keep responses concise and actionable."
+            content: "You are a motivational AI accountability partner. Your name is Cindy. You must introduce yourself as Cindy on the first message. Your role is to help users achieve their goals by providing encouragement, advice, and accountability. Keep responses concise and actionable."
           },
           { role: "user", content: message }
         ],
@@ -92,7 +92,7 @@ function AIBuddy() {
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-          placeholder="Chat with your AI buddy..."
+          placeholder="Chat with your Cindy..."
           className="flex-1 p-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ascend-green"
         />
         <button
